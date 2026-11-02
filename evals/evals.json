@@ -1,0 +1,75 @@
+{
+  "skill_name": "borehole-logging-expert",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can you review this final log extract like a senior engineer before it goes out? BH-7, ground el. 101.20 m, washbore with HW casing. 0.0-0.3 TOPSOIL. 0.3-2.1 SAND, some silt, trace gravel, dense, brown, moist. SS-1 at 0.76-1.37 m blows 2-3-3, recovery 450 mm. SS-2 at 1.52-2.13 m blows 3-4-4 N=8, rec 640 mm. 2.1-5.6 CLAY (CL), some silt, grey, stiff, wet, PP 0.5, 0.75, 0.5 kg/cm2 on SS-3 at 2.29 m. Lab on SS-3: LL 58, PL 24, PI 34, MC 31%. SS-4 at 3.05 m: 50/3\" N=50. 5.6 m END OF BOREHOLE, refusal on bedrock. Water level 1.2 m on completion (casing in hole, wash water). Water dry on 24 h.",
+      "expected_output": "Ranks findings by design impact. Catches: dense sand contradicted by N=6 and N=8 (loose); SS-1 N not reported; SS-2 recovery 640 mm exceeds a 610 mm drive; PP used on a split-spoon sample (not meaningful) and PP of ~0.5-0.75 kg/cm2 implies soft to firm, contradicting stiff; CL symbol contradicts LL 58 (should be CH); refusal 50/3\" shown as N=50 without refusal label; bedrock claimed from refusal without proving core; water level taken with wash water in the hole is not a groundwater level, and 'dry at 24 h' conflicts with it; moisture 'wet' for clay above/near water needs comment. Does not flag compact/medium terminology or refusal length as errors.",
+      "files": [],
+      "assertions": [
+        "Flags that 'dense' contradicts the low SPT N values (N=6 and N=8 indicate loose)",
+        "Notes that SS-1 has no N reported (should be 6)",
+        "Flags SS-2 recovery 640 mm as exceeding the 610 mm drive length",
+        "Flags pocket penetrometer readings taken on a split-spoon (driven) sample as unreliable",
+        "Flags that PP readings of about 0.5-0.75 kg/cm2 indicate soft to firm clay, contradicting 'stiff'",
+        "Flags CL as inconsistent with LL 58 (should be CH / fat clay)",
+        "Flags the 50/3\" refusal being reported as a plain N=50 without refusal labelling",
+        "Flags 'refusal on bedrock' as unproven without coring",
+        "Flags the 1.2 m water level as unreliable because wash water and casing were in the hole, and notes the conflict with 'dry at 24 h'",
+        "Does not treat a refusal penetration shorter than the drive length as an error in itself"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Turn this field sheet transcription into final-log descriptions the way a Canadian consultancy would, in metres, and list every interpretation you added so the reviewer can accept or reject it. Depths in feet. 0-4\" TOPSOIL. 4\"-2' FILL - mix of sandy silt, brick frags, dk brown, moist. 2'-14' CLAY - grey/brown, moist, firm to stiff, HP, tr silt, tr fg sand. 5' - w/ silt, damp. 9' - moist below 9'. 11' - tr gypsum nodules. 14' TILL - tan, moist, MP, f.g. sand, tr gravel, tr cobbles, grinding on cobbles. 19' S.A.A. grey, wet, sat. fg sand pockets. Auger refusal 21.5' on suspected boulder. Misc tests: PP=1.5,1.75,1.5 @ 6' on ST-2; T=0.45 @ 6' (standard head, kg/cm2). No seepage on completion, backfilled with cuttings.",
+      "expected_output": "Converts depths correctly (4 in = 0.10 m, 2 ft = 0.61 m, 14 ft = 4.27 m, 21.5 ft = 6.55 m). Produces layered descriptions with the main name in capitals, FILL with brick fragments, CLAY with (CH) as an interpretation, within-layer changes as '- ... below x m' sub-lines, a TILL named with its matrix only as a flagged interpretation, S.A.A. resolved, refusal line, numbered completion notes. Converts PP to kPa (qu about 147-172 kPa, Cu about 74-86 kPa) and torvane to Cu about 44 kPa with stated assumptions; notes PP and torvane disagree and which to trust; lists every added interpretation separately.",
+      "files": [],
+      "assertions": [
+        "Converts depths correctly: 4 in = 0.10 m, 2 ft = 0.61 m, 14 ft = 4.27 m, 21.5 ft = 6.55 m",
+        "Keeps FILL as its own layer and mentions the brick fragments",
+        "Presents the 5 ft, 9 ft and 11 ft changes as sub-lines within the clay layer at about 1.52 m, 2.74 m and 3.35 m",
+        "Converts the pocket penetrometer readings to kPa (qu about 147-172 kPa or Cu about 74-86 kPa) and states the conversion",
+        "Converts the torvane reading to about 44 kPa undrained shear strength",
+        "Points out that the pocket penetrometer and torvane strengths disagree",
+        "Resolves S.A.A. at 19 ft (5.79 m) into the till description with the grey, wet and sand-pocket changes",
+        "Ends with an auger refusal line at 6.55 m on a suspected boulder",
+        "Includes completion notes for no seepage and backfill with cuttings",
+        "Lists the added interpretations (e.g. USCS symbol, till matrix name, density term) separately for reviewer acceptance"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Rock question for the core logging feature: run R3 from 6.10 to 7.60 m, HQ triple tube. The logger wrote pieces (m): 0.22, 0.04, 0.31, 0.09, 0.12 (MB both ends), 0.07, 0.36 and 0.05 lost; fracture sheet has J at 6.32 (35 deg to core axis, rough, Fe stained), MB at 6.36, J at 6.67 (80 deg, smooth, clay infill 2 mm), BCZ 7.05-7.12. Sheet says recovery 1.21 (88%) and RQD 0.85/1.50. Hole is inclined 70 deg from horizontal. What should the app store and show, and is anything on the sheet wrong?",
+      "expected_output": "Computes TCR = 1.21/1.50 = 81% and flags the sheet's bracketed 88% as inconsistent with its own length. Flags that recovered pieces (1.21) plus lost core (0.05) leave 0.24 m of the 1.50 m run unaccounted for. Explains RQD counts natural-break pieces >= 100 mm with mechanical breaks ignored: rejoining across the mechanical breaks gives 0.22 + 0.35 + 0.28 + 0.36 = 1.21 m (81%), or about 1.14 m (76%) if the 0.07 m piece is really the broken zone; counting the pieces at face value (0.22+0.31+0.12+0.36 = 1.01 m, 67%) is wrong because it treats mechanical breaks as natural. The sheet's 0.85/1.50 (57%) matches no rule and needs the logger to confirm. Also flags that the broken zone at 7.05-7.12 m falls inside the 0.36 m 'intact' piece. Distinguishes angle to core axis from dip and says true dip needs oriented core or a survey. Converts along-hole depth to vertical (x sin 70 deg, e.g. 6.10 m along hole is about 5.73 m vertical) for elevations. Recommends storing lengths as written plus derived percentages, classifies RQD quality (poor to fair/good depending on basis), and calls out the smooth clay-infilled joint as design-relevant.",
+      "files": [],
+      "assertions": [
+        "Computes total core recovery as about 81% (1.21/1.50) and flags the sheet's 88% as inconsistent",
+        "Flags that recovered plus lost core (1.26 m) does not account for the full 1.50 m run",
+        "Explains that RQD ignores mechanical breaks and counts natural-break pieces of at least 100 mm",
+        "Gives a recomputed RQD (about 67% and/or about 78%) and flags the sheet's 0.85 m (57%) as needing confirmation",
+        "Distinguishes the angle to the core axis from true dip and says true dip needs orientation data",
+        "Converts along-hole depth to vertical depth using sin 70 degrees",
+        "Recommends storing the values as written alongside derived percentages",
+        "Calls out the smooth clay-infilled joint as design-relevant"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "A new geotech firm from Alberta is onboarding next week. They sent blank field forms showing: depth column in feet only, proportion key 'trace <10%, little 10-20%, some 20-35%, and 35-50%', density terms 'very loose/loose/compact/dense/very dense', a 'Q' column for pocket pen in tsf, a column 'N (bpf)', sample codes SS, ST, BS, CB, and a frozen ground section with codes like Nbn and Vx. What do we need to set up and what should we ask their engineer before we touch the product?",
+      "expected_output": "Fills a convention profile (feet field units, Burmister-style proportion terms, Canadian density terms, PP in tsf with conversion, bpf meaning a single N per foot vs increments, sample code mapping with unknowns BS and CB flagged, frozen-ground scheme as a specialist extension). Lists gaps the product cannot store yet. Produces a concrete question list (report units, PP conversion and Cu vs qu, whether increments are recorded, refusal display, meaning of BS/CB, frozen ground scheme, sign-off workflow). Asks for field/final pairs. Keeps everything company-agnostic: no firm name in config or code.",
+      "files": [],
+      "assertions": [
+        "Records that field depths are in feet and raises the reporting-unit question",
+        "Identifies the proportion terms as Burmister-style and treats them as a per-organisation setting",
+        "Recognises 'compact' as the Canadian equivalent of medium dense",
+        "Notes the pocket penetrometer reads in tsf and gives or asks for a conversion to kPa",
+        "Asks what 'N (bpf)' means: a single blows-per-foot value versus recorded 150 mm increments",
+        "Flags sample codes BS and CB as unknown and to be confirmed",
+        "Recognises Nbn and Vx as frozen-ground (ASTM D4083 / NRC-style) descriptors and flags them as a product gap",
+        "Asks for field and final log pairs from the firm",
+        "Keeps the setup company-agnostic (configuration, no firm-specific code or naming)",
+        "Produces a concrete list of questions for the firm's engineer"
+      ]
+    }
+  ]
+}
